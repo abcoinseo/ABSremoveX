@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABS RemoveX Pro+ - Remove Background & Convert</title>
+
+    <!-- Ad Library Script -->
+    <script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
+
     <style>
         /* --- Reset & Base --- */
         :root {
@@ -13,16 +17,14 @@
             --border-radius: 6px; --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { height: 100%; } /* Ensure html takes full height */
+        html { height: 100%; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6; color: var(--text-color); background-color: var(--light-gray);
-            display: flex; flex-direction: column; min-height: 100%; /* Ensure body takes full height */
+            display: flex; flex-direction: column; min-height: 100%;
             -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
         }
-        .site-wrapper { /* New wrapper for flex column */
-            display: flex; flex-direction: column; flex-grow: 1;
-        }
+        .site-wrapper { display: flex; flex-direction: column; flex-grow: 1; }
         a { color: var(--primary-color); text-decoration: none; transition: color 0.2s ease; }
         a:hover { color: darken(var(--primary-color), 10%); text-decoration: underline; }
         button {
@@ -35,27 +37,14 @@
         img { max-width: 100%; display: block; height: auto; }
 
         /* --- Header --- */
-        .app-header { /* Styles remain the same */
-            display: flex; justify-content: center; align-items: center; padding: 1.2rem 2rem;
-            background-color: var(--white); border-bottom: 1px solid var(--medium-gray);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; /* Prevent header shrinking */
-        }
-        .logo { /* Styles remain the same */
-            font-weight: 600; font-size: 1.8rem; color: var(--dark-gray);
-        }
+        .app-header { flex-shrink: 0; display: flex; justify-content: center; align-items: center; padding: 1.2rem 2rem; background-color: var(--white); border-bottom: 1px solid var(--medium-gray); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .logo { font-weight: 600; font-size: 1.8rem; color: var(--dark-gray); }
         .logo .part1 { color: var(--primary-color); }
         .logo .part2 { font-weight: 400; color: #5a6268; }
-        .logo .pro-badge {
-             font-size: 1.1rem; font-weight: 600; vertical-align: middle; margin-left: 8px; color: var(--primary-color);
-             background-color: rgba(0, 86, 179, 0.1); padding: 0.1em 0.4em; border-radius: 4px;
-        }
+        .logo .pro-badge { font-size: 1.1rem; font-weight: 600; vertical-align: middle; margin-left: 8px; color: var(--primary-color); background-color: rgba(0, 86, 179, 0.1); padding: 0.1em 0.4em; border-radius: 4px; }
 
         /* --- Main Content --- */
-        .main-content {
-             flex-grow: 1; /* Allow main content to grow */
-             display: flex; flex-direction: column; align-items: center; justify-content: center;
-             padding: 3rem 1rem; text-align: center; width: 100%;
-        }
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 1rem; text-align: center; width: 100%; }
         .content-wrapper { width: 100%; max-width: 700px; display: flex; flex-direction: column; align-items: center; }
         .hero-text { margin-bottom: 2rem; }
         .hero-text h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 0.7rem; color: #212529; line-height: 1.25; }
@@ -94,42 +83,22 @@
         .image-box img { max-height: 300px; margin: 0 auto 15px auto; background-image: linear-gradient(45deg, #e8e8e8 25%, transparent 25%), linear-gradient(-45deg, #e8e8e8 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e8e8e8 75%), linear-gradient(-45deg, transparent 75%, #e8e8e8 75%); background-size: 18px 18px; background-position: 0 0, 0 9px, 9px -9px, -9px 0px; border: 1px solid var(--medium-gray); border-radius: 4px; }
 
         /* --- Download Area --- */
-         .download-area { position: relative; /* For dropdown positioning */ }
-        .download-button-main { /* The main button that triggers dropdown */
-             background-color: var(--success-color); color: white; padding: 10px 28px; font-size: 1.05rem; display: inline-flex; align-items: center; gap: 0.5em;
-        }
+         .download-area { position: relative; }
+        .download-button-main { background-color: var(--success-color); color: white; padding: 10px 28px; font-size: 1.05rem; display: inline-flex; align-items: center; gap: 0.5em; }
          .download-button-main svg { width: 1em; height: 1em; fill: currentColor; }
         .download-button-main:hover { background-color: darken(var(--success-color), 10%); }
         .download-button-main.disabled { background-color: #adb5bd; cursor: not-allowed; pointer-events: none; box-shadow: none; }
-
-        .download-options { /* The dropdown menu */
-             position: absolute; bottom: 100%; /* Position above button */
-             left: 50%; transform: translateX(-50%) translateY(-10px); /* Center and add space */
-             background-color: var(--white); border-radius: var(--border-radius);
-             box-shadow: 0 3px 10px rgba(0,0,0,0.15); z-index: 10;
-             display: none; /* Hidden by default */
-             flex-direction: column; padding: 0.5rem 0;
-             min-width: 100px; /* Minimum width */
-             border: 1px solid var(--medium-gray);
-             opacity: 0; visibility: hidden;
-             transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-        }
-         .download-options.visible {
-             display: flex; opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-5px);
-         }
-
-        .download-options button {
-             background: none; box-shadow: none; border-radius: 0; padding: 0.6rem 1.2rem;
-             text-align: left; width: 100%; color: var(--text-color); font-weight: 400;
-             transition: background-color 0.15s ease;
-        }
+        .download-options { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-10px); background-color: var(--white); border-radius: var(--border-radius); box-shadow: 0 3px 10px rgba(0,0,0,0.15); z-index: 10; display: none; flex-direction: column; padding: 0.5rem 0; min-width: 100px; border: 1px solid var(--medium-gray); opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease; }
+         .download-options.visible { display: flex; opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-5px); }
+        .download-options button { background: none; box-shadow: none; border-radius: 0; padding: 0.6rem 1.2rem; text-align: left; width: 100%; color: var(--text-color); font-weight: 400; transition: background-color 0.15s ease; }
         .download-options button:hover { background-color: var(--light-gray); }
         .download-options button:active { transform: none; }
 
         #tryAnotherButton { background-color: var(--secondary-color); color: white; margin-top: 2rem; }
         #tryAnotherButton:hover { background-color: darken(var(--secondary-color), 10%); }
 
-        /* --- URL Input Modal (Styles remain the same) --- */
+        /* --- URL Input Modal --- */
+        /* Styles remain the same */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
         .modal-overlay.visible { opacity: 1; visibility: visible; }
         .modal-content { background-color: var(--white); padding: 2rem 2.5rem; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); max-width: 500px; width: 90%; position: relative; text-align: left; transform: scale(0.95); transition: transform 0.3s ease; }
@@ -150,34 +119,54 @@
 
         /* --- Footer --- */
         .app-footer {
-            flex-shrink: 0; /* Prevent footer shrinking */
-            padding: 1.5rem 1rem;
-            background-color: var(--white);
-            border-top: 1px solid var(--medium-gray);
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--secondary-color);
-            margin-top: auto; /* Push footer to bottom */
+            flex-shrink: 0; padding: 1.5rem 1rem; background-color: var(--white);
+            border-top: 1px solid var(--medium-gray); text-align: center; font-size: 0.9rem;
+            color: var(--secondary-color); margin-top: auto;
         }
-        .app-footer a {
-            color: var(--primary-color);
-            font-weight: 500;
+        .app-footer p { /* Style for the text line */
+            margin-bottom: 1rem; /* Add space below text, above ad */
         }
-        .app-footer a:hover {
-             color: darken(var(--primary-color), 10%);
+        .app-footer a { color: var(--primary-color); font-weight: 500; }
+        .app-footer a:hover { color: darken(var(--primary-color), 10%); }
+
+        .ad-container { /* Style the div holding the ad */
+            margin: 0 auto; /* Center block element horizontally */
+            max-width: 728px; /* Common banner width, adjust if needed */
+            /* Height might be set by the ad script itself */
         }
 
         /* --- Hidden Input --- */
         #fileInput { display: none; }
 
-        /* --- Responsiveness (Styles remain similar) --- */
-        @media (max-width: 768px) { /* ... previous responsive styles ... */ }
-        @media (max-width: 500px) { /* ... previous responsive styles ... */ }
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+             .hero-text h1 { font-size: 2.4rem; }
+             .hero-text p { font-size: 1.1rem; }
+             .main-content { padding: 2rem 1rem; }
+             .upload-section { padding: 1.5rem 2rem; }
+             .image-box { max-width: 300px; flex-basis: 280px; }
+             .modal-content { width: 95%; padding: 1.5rem; }
+             .modal-title { font-size: 1.3rem; }
+             .app-footer { padding: 1rem; }
+        }
+        @media (max-width: 500px) {
+             .hero-text h1 { font-size: 2rem; }
+              .main-content { padding: 1.5rem 1rem; }
+              .upload-section { padding: 1.5rem; }
+              .result-container { flex-direction: column; align-items: center; gap: 1.5rem; }
+              .image-box { width: 95%; max-width: 320px; flex-basis: auto; }
+              .upload-button, .url-upload-button { width: 90%; }
+              .modal-footer { flex-direction: column-reverse; align-items: stretch; }
+              .modal-button { width: 100%; }
+              .app-footer p { margin-bottom: 0.8rem; }
+              /* Ad container will likely resize via script, ensure it doesn't overflow */
+              .ad-container { width: 100%; max-width: 100%; }
+         }
 
     </style>
 </head>
 <body>
-<div class="site-wrapper"> <!-- Wrap everything for flex column layout -->
+<div class="site-wrapper">
     <header class="app-header">
         <div class="logo">
              <span class="part1">ABS</span><span class="part2">RemoveX</span><span class="pro-badge">Pro+</span>
@@ -193,6 +182,7 @@
 
             <!-- Upload Section -->
             <div class="upload-section" id="uploadSection">
+                 <!-- Content remains the same -->
                 <div class="upload-area" id="dropZone">
                     <div class="loader" id="loader">Loading...</div>
                     <div class="upload-controls" id="uploadControls">
@@ -205,8 +195,9 @@
                 <div id="statusMessage" class="status-message"></div>
             </div>
 
-            <!-- Result Area (initially hidden) -->
+            <!-- Result Area -->
             <div class="result-area" id="resultArea">
+                 <!-- Content remains the same -->
                 <div class="result-container">
                     <div class="image-box">
                         <h3>Original</h3>
@@ -215,7 +206,6 @@
                     <div class="image-box">
                         <h3>Background Removed</h3>
                         <img id="resultImage" src="#" alt="Background Removed Preview">
-                        <!-- Download Area with Dropdown -->
                         <div class="download-area">
                              <button id="downloadButtonMain" class="download-button-main disabled">
                                  Download
@@ -234,8 +224,9 @@
         </div>
     </main>
 
-    <!-- URL Input Modal (HTML remains the same) -->
+    <!-- URL Input Modal -->
     <div class="modal-overlay" id="urlModalOverlay">
+         <!-- Content remains the same -->
         <div class="modal-content">
             <button class="modal-close-button" id="modalCloseButton" aria-label="Close">×</button>
             <div class="modal-header"><h2 class="modal-title">Upload Image from URL</h2></div>
@@ -252,7 +243,28 @@
     </div>
 
     <footer class="app-footer">
-        Powered By: <a href="https://t.me/absstudiox" target="_blank" rel="noopener noreferrer">ABS StudioX</a>
+        <!-- Powered By Text -->
+        <p>
+            Powered By: <a href="https://t.me/absstudiox" target="_blank" rel="noopener noreferrer">ABS StudioX</a>
+        </p>
+
+        <!-- Ad Container -->
+        <div class="ad-container">
+            <script type="text/javascript">
+                // Ensure aclib is loaded before running this
+                if (typeof aclib !== 'undefined') {
+                    aclib.runBanner({
+                        zoneId: '9935146', // Your specific Zone ID
+                    });
+                } else {
+                    console.warn('aclib not loaded, cannot run banner.');
+                    // Optionally, you could try loading it dynamically here if needed,
+                    // but putting it in <head> is generally preferred.
+                }
+            </script>
+             <!-- Placeholder in case script fails or ad doesn't load -->
+             <noscript>Please enable JavaScript to view ads.</noscript>
+        </div>
     </footer>
 </div> <!-- End site-wrapper -->
 
@@ -262,42 +274,54 @@
         const apiUrl = 'https://api.remove.bg/v1.0/removebg';
         const MAX_FILE_SIZE_MB = 15;
 
-        // --- DOM Elements ---
+        // --- DOM Elements (Remain the same) ---
         const dropZone = document.getElementById('dropZone');
         const uploadControls = document.getElementById('uploadControls');
-        const uploadButton = document.getElementById('uploadButton');
-        const urlModalButton = document.getElementById('urlModalButton');
-        const fileInput = document.getElementById('fileInput');
-        const loader = document.getElementById('loader');
-        const statusMessage = document.getElementById('statusMessage');
-        const resultArea = document.getElementById('resultArea');
-        const originalImage = document.getElementById('originalImage');
-        const resultImage = document.getElementById('resultImage');
-        const tryAnotherButton = document.getElementById('tryAnotherButton');
-        const heroText = document.getElementById('heroText');
-        const uploadSection = document.getElementById('uploadSection');
-        // Download Elements
+        // ... (all other DOM elements as defined previously)
         const downloadButtonMain = document.getElementById('downloadButtonMain');
         const downloadOptions = document.getElementById('downloadOptions');
-        // Modal elements
-        const urlModalOverlay = document.getElementById('urlModalOverlay');
-        const modalUrlInput = document.getElementById('modalUrlInput');
-        const modalSubmitUrlButton = document.getElementById('modalSubmitUrlButton');
-        const modalCancelButton = document.getElementById('modalCancelButton');
-        const modalCloseButton = document.getElementById('modalCloseButton');
-        const modalStatusMessage = document.getElementById('modalStatusMessage');
+
+        // --- State (Remains the same) ---
+        let currentResultBlob = null;
+        let currentResultBlobUrl = null;
+        let originalFileName = 'image_no_bg.png';
+
+        // --- Event Listeners (Remain the same, including download listeners) ---
+        // ... (all listeners as defined previously)
+
+        // --- Core Logic & Helper Functions (Remain the same) ---
+        // handleDragOver, handleDragLeave, handleDrop
+        // openUrlModal, closeUrlModal, handleModalUrlSubmit
+        // handleUrlUpload, handleFile
+        // readFileAsDataURL
+        // downloadResult, downloadBlob, convertAndDownload
+        // showLoadingState, showResultState, showStatus
+        // resetUI, cleanupResultData
+
+        // NOTE: No changes needed in the JavaScript logic section below this line
+        // The ad integration happens purely in HTML and CSS positioning.
+        // Make sure the previous JS code is included here.
+
+        // =============================================
+        // PASTE PREVIOUS VERSION'S JAVASCRIPT HERE
+        // (From the `<script>` tag starting with `// --- Configuration ---`)
+        // =============================================
+         // --- Configuration ---
+        // const apiKey = ... (already defined above)
+        // const apiUrl = ... (already defined above)
+        // const MAX_FILE_SIZE_MB = ... (already defined above)
+
+        // --- DOM Elements ---
+        // const dropZone = ... (already defined above)
+        // ... include all const declarations for DOM elements
 
         // --- State ---
-        let currentResultBlob = null; // Store the result Blob itself
-        let currentResultBlobUrl = null; // Store the URL for the result Blob (used for preview)
-        let originalFileName = 'image_no_bg.png';
+        // let currentResultBlob = ... (already defined above)
+        // ... include all state variables
 
         // --- Event Listeners ---
         uploadButton.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files?.[0];
-            if (file) handleFile(file);
-        });
+        fileInput.addEventListener('change', (e) => { const file = e.target.files?.[0]; if (file) handleFile(file); });
         tryAnotherButton.addEventListener('click', resetUI);
         dropZone.addEventListener('dragover', handleDragOver);
         dropZone.addEventListener('dragleave', handleDragLeave);
@@ -308,191 +332,44 @@
         urlModalOverlay.addEventListener('click', (e) => { if (e.target === urlModalOverlay) closeUrlModal(); });
         modalSubmitUrlButton.addEventListener('click', handleModalUrlSubmit);
         modalUrlInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleModalUrlSubmit(); });
-
-        // Download Listener
-        downloadButtonMain.addEventListener('click', (e) => {
-             e.stopPropagation(); // Prevent body click listener from closing it immediately
-             if (downloadButtonMain.classList.contains('disabled')) return;
-             downloadOptions.classList.toggle('visible');
-        });
-
-        // Download Option Listeners
-        downloadOptions.addEventListener('click', (e) => {
-             if (e.target.tagName === 'BUTTON' && e.target.dataset.format) {
-                 const format = e.target.dataset.format;
-                 downloadResult(format);
-                 downloadOptions.classList.remove('visible'); // Hide after selection
-             }
-         });
-
-        // Close dropdown when clicking outside
-         document.addEventListener('click', (e) => {
-             if (!downloadButtonMain.contains(e.target) && !downloadOptions.contains(e.target)) {
-                 downloadOptions.classList.remove('visible');
-             }
-         });
-
+        downloadButtonMain.addEventListener('click', (e) => { e.stopPropagation(); if (downloadButtonMain.classList.contains('disabled')) return; downloadOptions.classList.toggle('visible'); });
+        downloadOptions.addEventListener('click', (e) => { if (e.target.tagName === 'BUTTON' && e.target.dataset.format) { const format = e.target.dataset.format; downloadResult(format); downloadOptions.classList.remove('visible'); } });
+        document.addEventListener('click', (e) => { if (!downloadButtonMain.contains(e.target) && !downloadOptions.contains(e.target)) { downloadOptions.classList.remove('visible'); } });
 
         // --- Drag & Drop Handlers ---
-        function handleDragOver(e) { /* ... same as before ... */ e.preventDefault(); if (!loader.classList.contains('visible')) dropZone.classList.add('drag-over'); }
-        function handleDragLeave() { /* ... same as before ... */ dropZone.classList.remove('drag-over'); }
-        function handleDrop(e) { /* ... same as before ... */ e.preventDefault(); if (loader.classList.contains('visible')) return; dropZone.classList.remove('drag-over'); const file = e.dataTransfer.files?.[0]; if (file) handleFile(file); else showStatus('No file detected in drop.', true, statusMessage); }
+        function handleDragOver(e) { e.preventDefault(); if (!loader.classList.contains('visible')) dropZone.classList.add('drag-over'); }
+        function handleDragLeave() { dropZone.classList.remove('drag-over'); }
+        function handleDrop(e) { e.preventDefault(); if (loader.classList.contains('visible')) return; dropZone.classList.remove('drag-over'); const file = e.dataTransfer.files?.[0]; if (file) handleFile(file); else showStatus('No file detected in drop.', true, statusMessage); }
 
         // --- Modal Functions ---
-        function openUrlModal() { /* ... same as before ... */ modalUrlInput.value = ''; modalStatusMessage.textContent = ''; modalStatusMessage.className = 'status-message'; urlModalOverlay.classList.add('visible'); modalUrlInput.focus(); }
-        function closeUrlModal() { /* ... same as before ... */ urlModalOverlay.classList.remove('visible'); }
-        function handleModalUrlSubmit() { /* ... same as before ... */ const url = modalUrlInput.value.trim(); if (!url) { showStatus('Please enter a valid URL.', true, modalStatusMessage); return; } try { new URL(url); } catch (_) { showStatus('Invalid URL format.', true, modalStatusMessage); return; } closeUrlModal(); handleUrlUpload(url); }
+        function openUrlModal() { modalUrlInput.value = ''; modalStatusMessage.textContent = ''; modalStatusMessage.className = 'status-message'; urlModalOverlay.classList.add('visible'); modalUrlInput.focus(); }
+        function closeUrlModal() { urlModalOverlay.classList.remove('visible'); }
+        function handleModalUrlSubmit() { const url = modalUrlInput.value.trim(); if (!url) { showStatus('Please enter a valid URL.', true, modalStatusMessage); return; } try { new URL(url); } catch (_) { showStatus('Invalid URL format.', true, modalStatusMessage); return; } closeUrlModal(); handleUrlUpload(url); }
 
         // --- Core Processing Logic ---
-        async function handleUrlUpload(url) { /* ... mostly same as before ... */
-             showLoadingState(); showStatus('Fetching image from URL...', false, statusMessage);
-             try {
-                 const response = await fetch(url);
-                 if (!response.ok) throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
-                 const contentType = response.headers.get('content-type');
-                 if (!contentType?.startsWith('image/')) throw new Error('URL did not point to a valid image.');
-                 const blob = await response.blob();
-                 if (blob.size > MAX_FILE_SIZE_MB * 1024 * 1024) throw new Error(`Image from URL exceeds ${MAX_FILE_SIZE_MB}MB limit.`);
-                 let filename = url.substring(url.lastIndexOf('/') + 1).split('?')[0] || 'image_from_url';
-                 if (!filename.includes('.') && contentType.split('/')[1]) { filename += '.' + contentType.split('/')[1].split('+')[0].toLowerCase(); }
-                 const fileObject = new File([blob], filename, { type: blob.type });
-                 await handleFile(fileObject);
-             } catch (error) { console.error('URL Fetch Error:', error); let message = `Error fetching URL: ${error.message}.`; if (error instanceof TypeError) { message += ' (Check CORS/network).'; } resetUI(); showStatus(message, true, statusMessage); }
-        }
-
-        async function handleFile(file) { /* ... validation same as before ... */
-             if (!file.type.startsWith('image/')) { showStatus('Error: Please upload an image file.', true, statusMessage); if (fileInput) fileInput.value = ''; return; }
-             const fileSizeMB = file.size / 1024 / 1024;
-             if (fileSizeMB > MAX_FILE_SIZE_MB) { showStatus(`Error: File size (${fileSizeMB.toFixed(1)}MB) exceeds ${MAX_FILE_SIZE_MB}MB limit.`, true, statusMessage); if (fileInput) fileInput.value = ''; return; }
-
-             originalFileName = file.name;
-             cleanupResultData(); // Use new cleanup function
-             showLoadingState();
-             showStatus('Reading file...', false, statusMessage);
-
-             try {
-                 const dataUrl = await readFileAsDataURL(file); originalImage.src = dataUrl;
-             } catch (readError) { resetUI(); showStatus('Error reading the selected file.', true, statusMessage); return; }
-
-             showStatus('Removing background...', false, statusMessage);
-             try {
-                 const formData = new FormData(); formData.append("size", "auto"); formData.append("image_file", file);
-                 const response = await fetch(apiUrl, { method: "POST", headers: { "X-Api-Key": apiKey }, body: formData });
-
-                 if (!response.ok) { let errorMsg = `API Error: ${response.status} ${response.statusText}`; try { const errData = await response.json(); errorMsg = errData.errors?.[0]?.title || errorMsg; } catch (_) {} throw new Error(errorMsg); }
-
-                 const resultArrayBuffer = await response.arrayBuffer();
-                 if (!resultArrayBuffer || resultArrayBuffer.byteLength === 0) throw new Error('API returned empty data.');
-
-                 // Store the result Blob and create its URL
-                 currentResultBlob = new Blob([resultArrayBuffer], { type: 'image/png' }); // Assume PNG from API
-                 currentResultBlobUrl = URL.createObjectURL(currentResultBlob);
-                 resultImage.src = currentResultBlobUrl;
-
-                 downloadButtonMain.classList.remove('disabled'); // Enable download button
-                 showResultState();
-                 showStatus('Background removed successfully!', false, statusMessage, true);
-
-             } catch (error) { console.error('API/Processing Error:', error); resetUI(); let userMessage = `Error: ${error.message}`; if (error.message.includes('API key') || error.message.includes('credits')) { userMessage += ' (Check API Key/Credits).'; } showStatus(userMessage, true, statusMessage); }
-        }
+        async function handleUrlUpload(url) { showLoadingState(); showStatus('Fetching image from URL...', false, statusMessage); try { const response = await fetch(url); if (!response.ok) throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`); const contentType = response.headers.get('content-type'); if (!contentType?.startsWith('image/')) throw new Error('URL did not point to a valid image.'); const blob = await response.blob(); if (blob.size > MAX_FILE_SIZE_MB * 1024 * 1024) throw new Error(`Image from URL exceeds ${MAX_FILE_SIZE_MB}MB limit.`); let filename = url.substring(url.lastIndexOf('/') + 1).split('?')[0] || 'image_from_url'; if (!filename.includes('.') && contentType.split('/')[1]) { filename += '.' + contentType.split('/')[1].split('+')[0].toLowerCase(); } const fileObject = new File([blob], filename, { type: blob.type }); await handleFile(fileObject); } catch (error) { console.error('URL Fetch Error:', error); let message = `Error fetching URL: ${error.message}.`; if (error instanceof TypeError) { message += ' (Check CORS/network).'; } resetUI(); showStatus(message, true, statusMessage); } }
+        async function handleFile(file) { if (!file.type.startsWith('image/')) { showStatus('Error: Please upload an image file.', true, statusMessage); if (fileInput) fileInput.value = ''; return; } const fileSizeMB = file.size / 1024 / 1024; if (fileSizeMB > MAX_FILE_SIZE_MB) { showStatus(`Error: File size (${fileSizeMB.toFixed(1)}MB) exceeds ${MAX_FILE_SIZE_MB}MB limit.`, true, statusMessage); if (fileInput) fileInput.value = ''; return; } originalFileName = file.name; cleanupResultData(); showLoadingState(); showStatus('Reading file...', false, statusMessage); try { const dataUrl = await readFileAsDataURL(file); originalImage.src = dataUrl; } catch (readError) { resetUI(); showStatus('Error reading the selected file.', true, statusMessage); return; } showStatus('Removing background...', false, statusMessage); try { const formData = new FormData(); formData.append("size", "auto"); formData.append("image_file", file); const response = await fetch(apiUrl, { method: "POST", headers: { "X-Api-Key": apiKey }, body: formData }); if (!response.ok) { let errorMsg = `API Error: ${response.status} ${response.statusText}`; try { const errData = await response.json(); errorMsg = errData.errors?.[0]?.title || errorMsg; } catch (_) {} throw new Error(errorMsg); } const resultArrayBuffer = await response.arrayBuffer(); if (!resultArrayBuffer || resultArrayBuffer.byteLength === 0) throw new Error('API returned empty data.'); currentResultBlob = new Blob([resultArrayBuffer], { type: 'image/png' }); currentResultBlobUrl = URL.createObjectURL(currentResultBlob); resultImage.src = currentResultBlobUrl; downloadButtonMain.classList.remove('disabled'); showResultState(); showStatus('Background removed successfully!', false, statusMessage, true); } catch (error) { console.error('API/Processing Error:', error); resetUI(); let userMessage = `Error: ${error.message}`; if (error.message.includes('API key') || error.message.includes('credits')) { userMessage += ' (Check API Key/Credits).'; } showStatus(userMessage, true, statusMessage); } }
 
         // --- Helper: Read File ---
-        function readFileAsDataURL(file) { /* ... same as before ... */ return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = (error) => reject(error); reader.readAsDataURL(file); }); }
+        function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = (error) => reject(error); reader.readAsDataURL(file); }); }
 
         // --- Download Logic ---
-        function downloadResult(format = 'png') {
-            if (!currentResultBlob) {
-                 showStatus('Error: No result image data available.', true, statusMessage);
-                 return;
-            }
-
-            const baseFilename = originalFileName.substring(0, originalFileName.lastIndexOf('.')) || originalFileName;
-            const filename = `${baseFilename}_no_bg.${format}`;
-
-            switch (format) {
-                case 'png':
-                    downloadBlob(currentResultBlob, filename);
-                    break;
-                case 'jpg':
-                case 'jpeg':
-                    convertAndDownload(currentResultBlobUrl, 'image/jpeg', filename, 0.9); // Quality 0.9
-                    break;
-                case 'webp':
-                    convertAndDownload(currentResultBlobUrl, 'image/webp', filename, 0.9); // Quality 0.9
-                    break;
-                default:
-                    showStatus(`Error: Unsupported download format "${format}".`, true, statusMessage);
-            }
-        }
-
-        function downloadBlob(blob, filename) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url); // Clean up blob URL
-        }
-
-        function convertAndDownload(imageUrl, mimeType, filename, quality = 0.9) {
-             const img = new Image();
-             img.onload = () => {
-                 try {
-                     const canvas = document.createElement('canvas');
-                     canvas.width = img.naturalWidth;
-                     canvas.height = img.naturalHeight;
-                     const ctx = canvas.getContext('2d');
-
-                     // Draw image onto canvas (consider background color for JPG)
-                     if (mimeType === 'image/jpeg') {
-                          ctx.fillStyle = '#FFFFFF'; // Set white background for JPG transparency
-                          ctx.fillRect(0, 0, canvas.width, canvas.height);
-                     }
-                     ctx.drawImage(img, 0, 0);
-
-                     // Get data URL and trigger download
-                     const dataUrl = canvas.toDataURL(mimeType, quality);
-                     const a = document.createElement('a');
-                     a.href = dataUrl;
-                     a.download = filename;
-                     document.body.appendChild(a);
-                     a.click();
-                     document.body.removeChild(a);
-                 } catch (e) {
-                      console.error("Canvas conversion error:", e);
-                      showStatus('Error converting image format.', true, statusMessage);
-                 }
-             };
-             img.onerror = () => {
-                  showStatus('Error loading result image for conversion.', true, statusMessage);
-             };
-             img.src = imageUrl; // Load the image from the blob URL
-        }
-
+        function downloadResult(format = 'png') { if (!currentResultBlob) { showStatus('Error: No result image data available.', true, statusMessage); return; } const baseFilename = originalFileName.substring(0, originalFileName.lastIndexOf('.')) || originalFileName; const filename = `${baseFilename}_no_bg.${format}`; switch (format) { case 'png': downloadBlob(currentResultBlob, filename); break; case 'jpg': case 'jpeg': convertAndDownload(currentResultBlobUrl, 'image/jpeg', filename, 0.9); break; case 'webp': convertAndDownload(currentResultBlobUrl, 'image/webp', filename, 0.9); break; default: showStatus(`Error: Unsupported download format "${format}".`, true, statusMessage); } }
+        function downloadBlob(blob, filename) { const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }
+        function convertAndDownload(imageUrl, mimeType, filename, quality = 0.9) { const img = new Image(); img.onload = () => { try { const canvas = document.createElement('canvas'); canvas.width = img.naturalWidth; canvas.height = img.naturalHeight; const ctx = canvas.getContext('2d'); if (mimeType === 'image/jpeg') { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, canvas.width, canvas.height); } ctx.drawImage(img, 0, 0); const dataUrl = canvas.toDataURL(mimeType, quality); const a = document.createElement('a'); a.href = dataUrl; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); } catch (e) { console.error("Canvas conversion error:", e); showStatus('Error converting image format.', true, statusMessage); } }; img.onerror = () => { showStatus('Error loading result image for conversion.', true, statusMessage); }; img.src = imageUrl; }
 
         // --- UI Update Functions ---
-        function showLoadingState() { /* ... same as before ... */ uploadControls.classList.add('hidden'); loader.classList.add('visible'); resultArea.classList.remove('visible'); statusMessage.textContent = 'Initializing...'; statusMessage.className = 'status-message'; heroText.style.display = 'none'; downloadButtonMain.classList.add('disabled'); downloadOptions.classList.remove('visible'); originalImage.src = '#'; resultImage.src = '#'; dropZone.style.cursor = 'default'; }
-        function showResultState() { /* ... same as before ... */ uploadSection.style.display = 'none'; loader.classList.remove('visible'); resultArea.classList.add('visible'); }
-        function showStatus(message, isError = false, element = statusMessage, isSuccess = false) { /* ... same as before ... */ element.textContent = message; let classes = 'status-message'; if (isError) classes += ' error'; else if (isSuccess) classes += ' success'; element.className = classes; }
-
-        function resetUI() {
-            cleanupResultData(); // Use new cleanup function
-            statusMessage.textContent = ''; statusMessage.className = 'status-message'; resultArea.classList.remove('visible'); loader.classList.remove('visible'); uploadControls.classList.remove('hidden'); uploadSection.style.display = 'block'; heroText.style.display = 'block'; originalImage.src = '#'; resultImage.src = '#';
-            downloadButtonMain.classList.add('disabled'); // Ensure download button is disabled
-            downloadOptions.classList.remove('visible'); // Hide dropdown
-            if(fileInput) fileInput.value = ''; originalFileName = 'image_no_bg.png'; dropZone.classList.remove('drag-over'); dropZone.style.cursor = 'pointer';
-        }
-
-        function cleanupResultData() { // Renamed cleanup function
-             if (currentResultBlobUrl) { URL.revokeObjectURL(currentResultBlobUrl); }
-             currentResultBlobUrl = null;
-             currentResultBlob = null; // Also clear the stored blob
-        }
+        function showLoadingState() { uploadControls.classList.add('hidden'); loader.classList.add('visible'); resultArea.classList.remove('visible'); statusMessage.textContent = 'Initializing...'; statusMessage.className = 'status-message'; heroText.style.display = 'none'; downloadButtonMain.classList.add('disabled'); downloadOptions.classList.remove('visible'); originalImage.src = '#'; resultImage.src = '#'; dropZone.style.cursor = 'default'; }
+        function showResultState() { uploadSection.style.display = 'none'; loader.classList.remove('visible'); resultArea.classList.add('visible'); }
+        function showStatus(message, isError = false, element = statusMessage, isSuccess = false) { element.textContent = message; let classes = 'status-message'; if (isError) classes += ' error'; else if (isSuccess) classes += ' success'; element.className = classes; }
+        function resetUI() { cleanupResultData(); statusMessage.textContent = ''; statusMessage.className = 'status-message'; resultArea.classList.remove('visible'); loader.classList.remove('visible'); uploadControls.classList.remove('hidden'); uploadSection.style.display = 'block'; heroText.style.display = 'block'; originalImage.src = '#'; resultImage.src = '#'; downloadButtonMain.classList.add('disabled'); downloadOptions.classList.remove('visible'); if(fileInput) fileInput.value = ''; originalFileName = 'image_no_bg.png'; dropZone.classList.remove('drag-over'); dropZone.style.cursor = 'pointer'; }
+        function cleanupResultData() { if (currentResultBlobUrl) { URL.revokeObjectURL(currentResultBlobUrl); } currentResultBlobUrl = null; currentResultBlob = null; }
 
         // --- Initial Setup ---
         resetUI();
+        // =============================================
+
+
     </script>
 
 </body>
